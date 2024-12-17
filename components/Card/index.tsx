@@ -1,6 +1,7 @@
 import React, { FC } from "react"
 import Image from "next/image"
 import { pokenmonTypes } from "@/types/pokemons"
+import { typeColours } from "@/data/type-colours"
 
 export interface CardProps {
   name: string
@@ -19,14 +20,33 @@ export const Card: FC<CardProps> = ({
   weight,
   type,
 }) => {
+  const getBackgroundColours = (): string => {
+    const backgroundColour =
+      (Object.keys(typeColours).find(
+        (typeName) => typeName === type[0].pokemon_v2_type.name
+      ) as keyof typeof typeColours) ?? ""
+
+    return typeColours[backgroundColour]
+  }
+
+  getBackgroundColours()
   return (
-    <div className="border-2">
-      <div className="flex justify-end">
-        <h2 className="block mr-auto">{name}</h2>
-        <span>HP{hp}</span>
+    <div className="p-2" style={{ backgroundColor: getBackgroundColours() }}>
+      <div className="flex justify-end font-semibold">
+        <h2 className="block mr-auto text-lg">{name}</h2>
+        <div className="text-lg">
+          <span className="text-xs">HP</span>
+          {hp}
+        </div>
       </div>
 
-      <Image src={image} alt={name} width="150" height="150" />
+      <Image
+        src={image}
+        alt={name}
+        width="150"
+        height="150"
+        className="m-auto"
+      />
       <ul>
         <li>Height: {height}</li>
         <li>Weight: {weight}</li>
