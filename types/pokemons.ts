@@ -25,6 +25,7 @@ export interface pokemonStat {
 export interface pokenmonTypes {
   pokemon_v2_type: {
     name: string
+    id: number
   }
 }
 

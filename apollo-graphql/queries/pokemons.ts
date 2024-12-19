@@ -17,6 +17,7 @@ export const POKEMONS_QUERY = gql`
       pokemon_v2_pokemontypes {
         pokemon_v2_type {
           name
+          id
         }
       }
       pokemon_v2_pokemonsprites {

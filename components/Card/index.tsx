@@ -2,9 +2,11 @@ import React, { FC } from "react"
 import Image from "next/image"
 import { pokenmonTypes } from "@/types/pokemons"
 import { typeColours } from "@/data/type-colours"
+import { hectogramsToPounds } from "@/utilities/data-conversion"
 
 export interface CardProps {
   name: string
+  id: number
   image: string
   hp: number
   height: number
@@ -14,6 +16,7 @@ export interface CardProps {
 
 export const Card: FC<CardProps> = ({
   name,
+  id,
   image,
   hp,
   height,
@@ -29,32 +32,58 @@ export const Card: FC<CardProps> = ({
     return typeColours[backgroundColour]
   }
 
-  getBackgroundColours()
   return (
-    <div className="p-2" style={{ backgroundColor: getBackgroundColours() }}>
+    <div
+      className="p-2 border-8 border-black/15"
+      style={{ backgroundColor: getBackgroundColours() }}
+    >
       <div className="flex justify-end font-semibold">
         <h2 className="block mr-auto text-lg">{name}</h2>
         <div className="text-lg">
           <span className="text-xs">HP</span>
           {hp}
         </div>
+        <div className="overflow-hidden">
+          <Image
+            className=""
+            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/brilliant-diamond-and-shining-pearl/${type[0].pokemon_v2_type.id}.png`}
+            alt={"type icon"}
+            width="152"
+            height="36"
+          />
+        </div>
       </div>
 
-      <Image
-        src={image}
-        alt={name}
-        width="150"
-        height="150"
-        className="m-auto"
-      />
+      <div className="border-slate-400 border-4 bg-black/15">
+        <Image
+          src={image}
+          alt={name}
+          width="150"
+          height="150"
+          className="m-auto"
+        />
+      </div>
+
+      <ul className="flex bg-slate-200 justify-center gap-2">
+        <li>NO. {id}</li>
+        <li>HT: {height}</li>
+        <li>WT: {hectogramsToPounds(weight).toFixed(1)} lbs</li>
+      </ul>
+
       <ul>
-        <li>Height: {height}</li>
-        <li>Weight: {weight}</li>
         <li>
           Type:
           <ul>
             {type.map((foo) => (
-              <li key={foo.pokemon_v2_type.name}>{foo.pokemon_v2_type.name}</li>
+              <li>
+                <Image
+                  className=""
+                  src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vii/lets-go-pikachu-lets-go-eevee/${foo.pokemon_v2_type.id}.png`}
+                  alt={"type icon"}
+                  width="152"
+                  height="36"
+                />
+              </li>
             ))}
           </ul>
         </li>
