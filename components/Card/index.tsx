@@ -37,21 +37,19 @@ export const Card: FC<CardProps> = ({
       className="p-2 border-8 border-black/15"
       style={{ backgroundColor: getBackgroundColours() }}
     >
-      <div className="flex justify-end font-semibold">
+      <div className="flex justify-end font-semibold gap-2 mb-3">
         <h2 className="block mr-auto text-lg">{name}</h2>
         <div className="text-lg">
           <span className="text-xs">HP</span>
           {hp}
         </div>
-        <div className="overflow-hidden">
-          <Image
-            className=""
-            src={`/images/${type[0].pokemon_v2_type.id}.png`}
-            alt={"type icon"}
-            width="32"
-            height="32"
-          />
-        </div>
+        <Image
+          className="rounded-full outline-2 outline-black/15 outline"
+          src={`/images/${type[0].pokemon_v2_type.id}.png`}
+          alt={"type icon"}
+          width="32"
+          height="32"
+        />
       </div>
 
       <div className="border-slate-400 border-4 bg-black/15">

@@ -69,7 +69,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
         </div>
       </div>
 
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
         {pokemonsData.map((item: pokemonsData) => (
           <Card
             key={item.name}
