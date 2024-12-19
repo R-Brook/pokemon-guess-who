@@ -46,10 +46,10 @@ export const Card: FC<CardProps> = ({
         <div className="overflow-hidden">
           <Image
             className=""
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-viii/brilliant-diamond-and-shining-pearl/${type[0].pokemon_v2_type.id}.png`}
+            src={`/images/${type[0].pokemon_v2_type.id}.png`}
             alt={"type icon"}
-            width="152"
-            height="36"
+            width="32"
+            height="32"
           />
         </div>
       </div>
@@ -80,8 +80,8 @@ export const Card: FC<CardProps> = ({
                   className=""
                   src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/types/generation-vii/lets-go-pikachu-lets-go-eevee/${foo.pokemon_v2_type.id}.png`}
                   alt={"type icon"}
-                  width="152"
-                  height="36"
+                  width="114"
+                  height="27"
                 />
               </li>
             ))}
