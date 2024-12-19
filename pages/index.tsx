@@ -1,17 +1,19 @@
-import Image from "next/image"
-import { POKEMONS_QUERY } from "@/apollo-graphql/queries/pokemons"
-import { Card } from "@/components/Card/index"
-import { pokemonsData, PokemonsProps } from "@/types/pokemons"
-import client from "../apollo-graphql/apollo-client"
-import ChatPage from "@/components/Chat"
 import { useState } from "react"
+import { POKEMONS_QUERY } from "@/apollo-graphql/queries/pokemons"
+import client from "@/apollo-graphql/apollo-client"
+import { Card } from "@/components/Card/index"
+import ChatPage from "@/components/Chat"
+import { Select } from "@/components/Select"
+import { pokemonsData, PokemonsProps } from "@/types/pokemons"
 import { io } from "socket.io-client"
 
 export default function Home({ pokemonsData }: PokemonsProps) {
-  const [showChat, setShowChat] = useState(false)
-  const [userName, setUserName] = useState("")
-  const [showSpinner, setShowSpinner] = useState(false)
-  const [roomId, setroomId] = useState("")
+  const [showChat, setShowChat] = useState<boolean>(false)
+  const [userName, setUserName] = useState<string>("")
+  const [showSpinner, setShowSpinner] = useState<boolean>(false)
+  const [roomId, setroomId] = useState<string>("")
+  const [chosenPokemon, setChosenPokemon] = useState<string>("")
+  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
 
   var socket: any
   socket = io("http://localhost:3001")
@@ -31,10 +33,19 @@ export default function Home({ pokemonsData }: PokemonsProps) {
     }
   }
 
+  const getPokemonNames = (): string[] => {
+    const namesToChooseFrom: string[] = ["Please select a Pokemon"]
+
+    pokemonsData.map((item: pokemonsData) => namesToChooseFrom.push(item.name))
+
+    return namesToChooseFrom
+  }
+
   return (
     <div className="w-full max-w-[1200px] m-auto">
-      <h1>Pokemon Guess Who</h1>
-      <div>
+      <h1 className="text-5xl">Pokemon Guess Who</h1>
+
+      <section>
         <div
           className="flex justify-center align-middle flex-col gap-4 h-screen w-screen "
           style={{ display: showChat ? "none" : "" }}
@@ -64,28 +75,45 @@ export default function Home({ pokemonsData }: PokemonsProps) {
             )}
           </button>
         </div>
-        <div style={{ display: !showChat ? "none" : "" }}>
-          <ChatPage socket={socket} roomId={roomId} username={userName} />
-        </div>
+      </section>
+
+      {userName && roomId && chosenPokemon === "" && (
+        <Select
+          required={true}
+          label={"Choose your pokemon"}
+          name={"pokemon-select"}
+          id={"player-pokemon"}
+          value={chosenPokemon}
+          options={getPokemonNames()}
+          onChange={(event) => setChosenPokemon(event.target.value)}
+        />
+      )}
+
+      {chosenPokemon !== "" && <p>Chosen pokemon: {chosenPokemon}</p>}
+      <div style={{ display: !showChat ? "none" : "" }}>
+        <ChatPage socket={socket} roomId={roomId} username={userName} />
       </div>
 
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
-        {pokemonsData.map((item: pokemonsData) => (
-          <Card
-            key={item.name}
-            name={item.name}
-            id={item.id}
-            image={
-              item.pokemon_v2_pokemonsprites[0].sprites.other[
-                `official-artwork`
-              ].front_default
-            }
-            hp={item.pokemon_v2_pokemonstats[0].base_stat}
-            height={item.height}
-            weight={item.weight}
-            type={item.pokemon_v2_pokemontypes}
-          />
-        ))}
+      <section>
+        <h2 className="text-2xl">Remaining Pokemon to guess from</h2>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
+          {pokemonsData.map((item: pokemonsData) => (
+            <Card
+              key={item.name}
+              name={item.name}
+              id={item.id}
+              image={
+                item.pokemon_v2_pokemonsprites[0].sprites.other[
+                  `official-artwork`
+                ].front_default
+              }
+              hp={item.pokemon_v2_pokemonstats[0].base_stat}
+              height={item.height}
+              weight={item.weight}
+              type={item.pokemon_v2_pokemontypes}
+            />
+          ))}
+        </div>
       </section>
     </div>
   )
