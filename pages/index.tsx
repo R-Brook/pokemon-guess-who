@@ -45,54 +45,58 @@ export default function Home({ pokemonsData }: PokemonsProps) {
     <div className="w-full max-w-[1200px] m-auto">
       <h1 className="text-5xl">Pokemon Guess Who</h1>
 
-      <section>
-        <div
-          className="flex justify-center align-middle flex-col gap-4 h-screen w-screen "
-          style={{ display: showChat ? "none" : "" }}
-        >
-          <input
-            className="h-8 w-60 p-2"
-            type="text"
-            placeholder="Username"
-            onChange={(e) => setUserName(e.target.value)}
-            disabled={showSpinner}
-          />
-          <input
-            className="h-8 w-60 p-2"
-            type="text"
-            placeholder="room id"
-            onChange={(e) => setroomId(e.target.value)}
-            disabled={showSpinner}
-          />
-          <button
-            className="h-8 w-60 flex justify-center align-middle"
-            onClick={() => handleJoin()}
-          >
-            {!showSpinner ? (
-              "Join"
-            ) : (
-              <div className="border-2 border-gray border-t-2 border-top-blue w-5 h-5 animate-spin"></div>
-            )}
-          </button>
-        </div>
-      </section>
-
-      {userName && roomId && chosenPokemon === "" && (
-        <Select
-          required={true}
-          label={"Choose your pokemon"}
-          name={"pokemon-select"}
-          id={"player-pokemon"}
-          value={chosenPokemon}
-          options={getPokemonNames()}
-          onChange={(event) => setChosenPokemon(event.target.value)}
-        />
+      {!showChat && (
+        <section className="border-2 border-green">
+          <div className="flex justify-center align-middle flex-col gap-4 h-screen w-screen ">
+            <input
+              className="h-8 w-60 p-2"
+              type="text"
+              placeholder="Username"
+              onChange={(e) => setUserName(e.target.value)}
+              disabled={showSpinner}
+            />
+            <input
+              className="h-8 w-60 p-2"
+              type="text"
+              placeholder="room id"
+              onChange={(e) => setroomId(e.target.value)}
+              disabled={showSpinner}
+            />
+            <button
+              className="h-8 w-60 flex justify-center align-middle"
+              onClick={() => handleJoin()}
+            >
+              {!showSpinner ? (
+                "Join"
+              ) : (
+                <div className="border-2 border-gray border-t-2 border-top-blue w-5 h-5 animate-spin"></div>
+              )}
+            </button>
+          </div>
+        </section>
       )}
 
-      {chosenPokemon !== "" && <p>Chosen pokemon: {chosenPokemon}</p>}
-      <div style={{ display: !showChat ? "none" : "" }}>
+      {userName && roomId && !gameIsReady && (
+        <div className="flex flex-wrap gap-2 border-2 border-blue my-4">
+          <Select
+            required={true}
+            label={"Choose your pokemon"}
+            name={"pokemon-select"}
+            id={"player-pokemon"}
+            value={chosenPokemon}
+            options={getPokemonNames()}
+            onChange={(event) => setChosenPokemon(event.target.value)}
+          />
+          <button onClick={() => setGameIsReady(true)}>Start</button>
+        </div>
+      )}
+      {gameIsReady && (
+        <span className="w-full">Chosen pokemon: {chosenPokemon}</span>
+      )}
+
+      {showChat && (
         <ChatPage socket={socket} roomId={roomId} username={userName} />
-      </div>
+      )}
 
       <section>
         <h2 className="text-2xl">Remaining Pokemon to guess from</h2>
