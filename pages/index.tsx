@@ -15,6 +15,14 @@ export default function Home({ pokemonsData }: PokemonsProps) {
   const [chosenPokemon, setChosenPokemon] = useState<string>("")
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
 
+  const getPokemonNames = (): string[] => {
+    const namesToChooseFrom: string[] = ["Please select a Pokemon"]
+
+    pokemonsData.map((item: pokemonsData) => namesToChooseFrom.push(item.name))
+
+    return namesToChooseFrom
+  }
+
   var socket: any
   socket = io("http://localhost:3001")
 
@@ -31,14 +39,6 @@ export default function Home({ pokemonsData }: PokemonsProps) {
     } else {
       alert("Please fill in Username and Room Id")
     }
-  }
-
-  const getPokemonNames = (): string[] => {
-    const namesToChooseFrom: string[] = ["Please select a Pokemon"]
-
-    pokemonsData.map((item: pokemonsData) => namesToChooseFrom.push(item.name))
-
-    return namesToChooseFrom
   }
 
   return (
@@ -100,7 +100,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
 
       <section>
         <h2 className="text-2xl">Remaining Pokemon to guess from</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
           {pokemonsData.map((item: pokemonsData) => (
             <Card
               key={item.name}
