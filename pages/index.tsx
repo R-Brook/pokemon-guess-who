@@ -13,10 +13,9 @@ export default function Home({ pokemonsData }: PokemonsProps) {
   const [showSpinner, setShowSpinner] = useState<boolean>(false)
   const [roomId, setroomId] = useState<string>("")
   const [chosenPokemon, setChosenPokemon] = useState<string>("")
-  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
+  // const [gameIsReady, setGameIsReady] = useState<boolean>(false)
 
-  var socket: any
-  socket = io("http://localhost:3001")
+  const socket = io("http://localhost:3001")
 
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {

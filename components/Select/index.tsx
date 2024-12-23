@@ -1,20 +1,19 @@
-import React, { FC } from "react"
+import React, { ChangeEvent, FC } from "react"
 
 export interface SelectProps {
   required: boolean
   label: string
   name: string
-  onChange?: (event: any) => void
-  onBlur?: (event: any) => void
+  onChange?: (event: ChangeEvent<HTMLSelectElement>) => void
+  onBlur?: (event: ChangeEvent<HTMLSelectElement>) => void
   id: string
   options: string[]
-  value: any
+  value: string | number
 }
 
 export const Select: FC<SelectProps> = ({
   required,
   label,
-  name,
   id,
   options,
   value,
