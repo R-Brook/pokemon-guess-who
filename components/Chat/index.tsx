@@ -2,13 +2,19 @@
 import React, { useEffect, useState } from "react"
 
 interface IMsgDataTypes {
-  roomId: String | number
-  user: String
-  msg: String
-  time: String
+  roomId: string | number
+  user: string
+  msg: string
+  time: string
 }
 
-const ChatPage = ({ socket, username, roomId }: any) => {
+interface SocketProps {
+  socket: any
+  username: string
+  roomId: string
+}
+
+const ChatPage = ({ socket, username, roomId }: SocketProps) => {
   const [currentMsg, setCurrentMsg] = useState("")
   const [chat, setChat] = useState<IMsgDataTypes[]>([])
 
@@ -44,7 +50,7 @@ const ChatPage = ({ socket, username, roomId }: any) => {
           </p>
         </div>
         <div>
-          {chat.map(({ roomId, user, msg, time }, key) => (
+          {chat.map(({ /*roomId,*/ user, msg /*, time*/ }, key) => (
             <div
               key={key}
               className={
