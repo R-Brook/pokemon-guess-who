@@ -13,7 +13,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
   const [showSpinner, setShowSpinner] = useState<boolean>(false)
   const [roomId, setroomId] = useState<string>("")
   const [chosenPokemon, setChosenPokemon] = useState<string>("")
-  // const [gameIsReady, setGameIsReady] = useState<boolean>(false)
+  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
 
   const socket = io("http://localhost:3001")
 
@@ -44,11 +44,9 @@ export default function Home({ pokemonsData }: PokemonsProps) {
     <div className="w-full max-w-[1200px] m-auto">
       <h1 className="text-5xl">Pokemon Guess Who</h1>
 
-      <section>
-        <div
-          className="flex justify-center align-middle flex-col gap-4 h-screen w-screen "
-          style={{ display: showChat ? "none" : "" }}
-        >
+      {/* Log in section */}
+      {!showChat && (
+        <section className="border-2 border-blue-400 flex justify-center align-middle flex-col gap-4  w-screen">
           <input
             className="h-8 w-60 p-2"
             type="text"
@@ -73,29 +71,37 @@ export default function Home({ pokemonsData }: PokemonsProps) {
               <div className="border-2 border-gray border-t-2 border-top-blue w-5 h-5 animate-spin"></div>
             )}
           </button>
-        </div>
-      </section>
-
-      {userName && roomId && chosenPokemon === "" && (
-        <Select
-          required={true}
-          label={"Choose your pokemon"}
-          name={"pokemon-select"}
-          id={"player-pokemon"}
-          value={chosenPokemon}
-          options={getPokemonNames()}
-          onChange={(event) => setChosenPokemon(event.target.value)}
-        />
+        </section>
       )}
 
-      {chosenPokemon !== "" && <p>Chosen pokemon: {chosenPokemon}</p>}
+      {/* Choose your pokemon section */}
+      {userName && roomId && !gameIsReady && (
+        <div className="flex flex-wrap gap-2 border-2 border-blue my-4">
+          <Select
+            required={true}
+            label={"Choose your pokemon"}
+            name={"pokemon-select"}
+            id={"player-pokemon"}
+            value={chosenPokemon}
+            options={getPokemonNames()}
+            onChange={(event) => setChosenPokemon(event.target.value)}
+          />
+          <button onClick={() => setGameIsReady(true)}>Start</button>
+        </div>
+      )}
+      {gameIsReady && (
+        <span className="w-full">Chosen pokemon: {chosenPokemon}</span>
+      )}
+
       <div style={{ display: !showChat ? "none" : "" }}>
         <ChatPage socket={socket} roomId={roomId} username={userName} />
       </div>
 
+      {/* Pokemon to guess from section */}
       <section>
         <h2 className="text-2xl">Remaining Pokemon to guess from</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
           {pokemonsData.map((item: pokemonsData) => (
             <Card
               key={item.name}
