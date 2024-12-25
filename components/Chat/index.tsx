@@ -1,5 +1,7 @@
 "use client"
 import React, { useEffect, useState } from "react"
+import { DefaultEventsMap } from "socket.io"
+import { Socket } from "socket.io-client"
 
 interface IMsgDataTypes {
   roomId: string | number
@@ -9,7 +11,7 @@ interface IMsgDataTypes {
 }
 
 interface SocketProps {
-  socket: any
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>
   username: string
   roomId: string
 }
