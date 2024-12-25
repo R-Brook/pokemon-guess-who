@@ -1,11 +1,13 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { POKEMONS_QUERY } from "@/apollo-graphql/queries/pokemons"
 import client from "@/apollo-graphql/apollo-client"
 import { Card } from "@/components/Card/index"
 import ChatPage from "@/components/Chat"
 import { Select } from "@/components/Select"
 import { pokemonsData, PokemonsProps } from "@/types/pokemons"
-import { io } from "socket.io-client"
+import { io, Socket } from "socket.io-client"
+import { shuffleArray } from "@/utilities/shuffle"
+import { DefaultEventsMap } from "socket.io"
 
 export default function Home({ pokemonsData }: PokemonsProps) {
   const [showChat, setShowChat] = useState<boolean>(false)
@@ -14,8 +16,12 @@ export default function Home({ pokemonsData }: PokemonsProps) {
   const [roomId, setroomId] = useState<string>("")
   const [chosenPokemon, setChosenPokemon] = useState<string>("")
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
+  const [pokemonCards, setPokemonCards] = useState<pokemonsData[]>(pokemonsData)
+  const [pokemonCardsReady, setPokemonCardsReady] = useState<boolean>(false)
 
-  const socket = io("http://localhost:3001")
+  const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io(
+    "http://localhost:3001"
+  )
 
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {
@@ -32,6 +38,12 @@ export default function Home({ pokemonsData }: PokemonsProps) {
     }
   }
 
+  useEffect(() => {
+    setPokemonCards(shuffleArray(pokemonsData))
+    setPokemonCardsReady(true)
+    console.log(pokemonCards)
+  }, [])
+
   const getPokemonNames = (): string[] => {
     const namesToChooseFrom: string[] = ["Please select a Pokemon"]
 
@@ -46,7 +58,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
 
       {/* Log in section */}
       {!showChat && (
-        <section className="border-2 border-blue-400 flex justify-center align-middle flex-col gap-4  w-screen">
+        <section className="border-2 border-blue-400 flex justify-center align-middle flex-col gap-4">
           <input
             className="h-8 w-60 p-2"
             type="text"
@@ -101,24 +113,26 @@ export default function Home({ pokemonsData }: PokemonsProps) {
       <section>
         <h2 className="text-2xl">Remaining Pokemon to guess from</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
-          {pokemonsData.map((item: pokemonsData) => (
-            <Card
-              key={item.name}
-              name={item.name}
-              id={item.id}
-              image={
-                item.pokemon_v2_pokemonsprites[0].sprites.other[
-                  `official-artwork`
-                ].front_default
-              }
-              hp={item.pokemon_v2_pokemonstats[0].base_stat}
-              height={item.height}
-              weight={item.weight}
-              type={item.pokemon_v2_pokemontypes}
-            />
-          ))}
-        </div>
+        {pokemonCardsReady && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
+            {pokemonCards.map((item: pokemonsData) => (
+              <Card
+                key={item.name}
+                name={item.name}
+                id={item.id}
+                image={
+                  item.pokemon_v2_pokemonsprites[0].sprites.other[
+                    `official-artwork`
+                  ].front_default
+                }
+                hp={item.pokemon_v2_pokemonstats[0].base_stat}
+                height={item.height}
+                weight={item.weight}
+                type={item.pokemon_v2_pokemontypes}
+              />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   )
