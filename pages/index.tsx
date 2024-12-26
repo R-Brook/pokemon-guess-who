@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { POKEMONS_QUERY } from "@/apollo-graphql/queries/pokemons"
 import client from "@/apollo-graphql/apollo-client"
+import { Button } from "@/components/Button"
 import { Card } from "@/components/Card/index"
 import ChatPage from "@/components/Chat"
 import { Select } from "@/components/Select"
@@ -73,16 +74,13 @@ export default function Home({ pokemonsData }: PokemonsProps) {
             onChange={(e) => setroomId(e.target.value)}
             disabled={showSpinner}
           />
-          <button
-            className="h-8 w-60 flex justify-center align-middle"
-            onClick={() => handleJoin()}
-          >
+          <Button onClick={() => handleJoin()}>
             {!showSpinner ? (
               "Join"
             ) : (
               <div className="border-2 border-gray border-t-2 border-top-blue w-5 h-5 animate-spin"></div>
             )}
-          </button>
+          </Button>
         </section>
       )}
 
@@ -98,7 +96,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
             options={getPokemonNames()}
             onChange={(event) => setChosenPokemon(event.target.value)}
           />
-          <button onClick={() => setGameIsReady(true)}>Start</button>
+          <Button onClick={() => setGameIsReady(true)}>Start</Button>
         </div>
       )}
       {gameIsReady && (

@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react"
 import { DefaultEventsMap } from "socket.io"
 import { Socket } from "socket.io-client"
+import { Button } from "@/components/Button"
 
 interface IMsgDataTypes {
   roomId: string | number
@@ -82,7 +83,7 @@ const ChatPage = ({ socket, username, roomId }: SocketProps) => {
               placeholder="Type your message.."
               onChange={(e) => setCurrentMsg(e.target.value)}
             />
-            <button className="h-8">Send</button>
+            <Button>Send</Button>
           </form>
         </div>
       </div>
