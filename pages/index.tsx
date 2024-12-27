@@ -1,32 +1,20 @@
 import { useEffect, useState } from "react"
 import { POKEMONS_QUERY } from "@/apollo-graphql/queries/pokemons"
 import client from "@/apollo-graphql/apollo-client"
-import { Button } from "@/components/Button"
 import { Card } from "@/components/Card/index"
 import ChatPage from "@/components/Chat"
-import { Select } from "@/components/Select"
+import { ChoosePokemon } from "@/components/Choose-Pokemon"
 import { pokemonsData, PokemonsProps } from "@/types/pokemons"
 import { shuffleArray } from "@/utilities/shuffle"
 
 export default function Home({ pokemonsData }: PokemonsProps) {
-  const [chosenPokemon, setChosenPokemon] = useState<string>("")
-  const [gameIsReady, setGameIsReady] = useState<boolean>(false)
   const [pokemonCards, setPokemonCards] = useState<pokemonsData[]>(pokemonsData)
   const [pokemonCardsReady, setPokemonCardsReady] = useState<boolean>(false)
 
   useEffect(() => {
     setPokemonCards(shuffleArray(pokemonsData))
     setPokemonCardsReady(true)
-    console.log(pokemonCards)
   }, [])
-
-  const getPokemonNames = (): string[] => {
-    const namesToChooseFrom: string[] = ["Please select a Pokemon"]
-
-    pokemonsData.map((item: pokemonsData) => namesToChooseFrom.push(item.name))
-
-    return namesToChooseFrom
-  }
 
   return (
     <div className="w-full max-w-[1200px] m-auto">
@@ -36,23 +24,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
       <ChatPage />
 
       {/* Choose your pokemon section */}
-      {!gameIsReady && (
-        <div className="flex flex-wrap gap-2 border-2 border-blue my-4">
-          <Select
-            required={true}
-            label={"Choose your pokemon"}
-            name={"pokemon-select"}
-            id={"player-pokemon"}
-            value={chosenPokemon}
-            options={getPokemonNames()}
-            onChange={(event) => setChosenPokemon(event.target.value)}
-          />
-          <Button onClick={() => setGameIsReady(true)}>Start</Button>
-        </div>
-      )}
-      {gameIsReady && (
-        <span className="w-full">Chosen pokemon: {chosenPokemon}</span>
-      )}
+      <ChoosePokemon pokemons_data={pokemonsData} />
 
       {/* Pokemon to guess from section */}
       <section>
