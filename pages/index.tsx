@@ -6,38 +6,13 @@ import { Card } from "@/components/Card/index"
 import ChatPage from "@/components/Chat"
 import { Select } from "@/components/Select"
 import { pokemonsData, PokemonsProps } from "@/types/pokemons"
-import { io, Socket } from "socket.io-client"
 import { shuffleArray } from "@/utilities/shuffle"
-import { DefaultEventsMap } from "socket.io"
 
 export default function Home({ pokemonsData }: PokemonsProps) {
-  const [showChat, setShowChat] = useState<boolean>(false)
-  const [userName, setUserName] = useState<string>("")
-  const [showSpinner, setShowSpinner] = useState<boolean>(false)
-  const [roomId, setroomId] = useState<string>("")
   const [chosenPokemon, setChosenPokemon] = useState<string>("")
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
   const [pokemonCards, setPokemonCards] = useState<pokemonsData[]>(pokemonsData)
   const [pokemonCardsReady, setPokemonCardsReady] = useState<boolean>(false)
-
-  const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io(
-    "http://localhost:3001"
-  )
-
-  const handleJoin = () => {
-    if (userName !== "" && roomId !== "") {
-      console.log(userName, "userName", roomId, "roomId")
-      socket.emit("join_room", roomId)
-      setShowSpinner(true)
-      // You can remove this setTimeout and add your own logic
-      setTimeout(() => {
-        setShowChat(true)
-        setShowSpinner(false)
-      }, 4000)
-    } else {
-      alert("Please fill in Username and Room Id")
-    }
-  }
 
   useEffect(() => {
     setPokemonCards(shuffleArray(pokemonsData))
@@ -57,35 +32,11 @@ export default function Home({ pokemonsData }: PokemonsProps) {
     <div className="w-full max-w-[1200px] m-auto">
       <h1 className="text-5xl">Pokemon Guess Who</h1>
 
-      {/* Log in section */}
-      {!showChat && (
-        <section className="border-2 border-blue-400 flex justify-center align-middle flex-col gap-4">
-          <input
-            className="h-8 w-60 p-2"
-            type="text"
-            placeholder="Username"
-            onChange={(e) => setUserName(e.target.value)}
-            disabled={showSpinner}
-          />
-          <input
-            className="h-8 w-60 p-2"
-            type="text"
-            placeholder="room id"
-            onChange={(e) => setroomId(e.target.value)}
-            disabled={showSpinner}
-          />
-          <Button onClick={() => handleJoin()}>
-            {!showSpinner ? (
-              "Join"
-            ) : (
-              <div className="border-2 border-gray border-t-2 border-top-blue w-5 h-5 animate-spin"></div>
-            )}
-          </Button>
-        </section>
-      )}
+      {/* Log in and chat section  */}
+      <ChatPage />
 
       {/* Choose your pokemon section */}
-      {userName && roomId && !gameIsReady && (
+      {!gameIsReady && (
         <div className="flex flex-wrap gap-2 border-2 border-blue my-4">
           <Select
             required={true}
@@ -102,10 +53,6 @@ export default function Home({ pokemonsData }: PokemonsProps) {
       {gameIsReady && (
         <span className="w-full">Chosen pokemon: {chosenPokemon}</span>
       )}
-
-      <div style={{ display: !showChat ? "none" : "" }}>
-        <ChatPage socket={socket} roomId={roomId} username={userName} />
-      </div>
 
       {/* Pokemon to guess from section */}
       <section>
