@@ -2,12 +2,15 @@ export interface PokemonsProps {
   pokemonsData: pokemonsData[]
 }
 
-export interface pokemonsData {
+export interface pokemonsDataSummary {
   height: number
   base_experience: number
   name: string
   id: number
   weight: number
+}
+
+export interface pokemonsData extends pokemonsDataSummary {
   pokemon_v2_pokemonstats: pokemonStats[]
   pokemon_v2_pokemontypes: pokenmonTypes[]
   pokemon_v2_pokemonsprites: pokemonSprites[]

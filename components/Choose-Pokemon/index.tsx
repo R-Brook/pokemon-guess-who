@@ -1,16 +1,44 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Button } from "../Button"
-import { Select } from "../Select"
-import { pokemonsData } from "@/types/pokemons"
+import { pokemonsData, pokenmonTypes } from "@/types/pokemons"
 
 export interface ChoosePokemonProps {
   pokemons_data: pokemonsData[]
 }
 
+export interface ChosenPokemonDataSummaryProps {
+  name: string
+  id: number
+  image: string
+  hp: number
+  height: number
+  weight: number
+  type: string[]
+}
+
 export const ChoosePokemon = ({ pokemons_data }: ChoosePokemonProps) => {
-  const [chosenPokemon, setChosenPokemon] = useState<string>("")
+  const chosenPokemonDataSummary: ChosenPokemonDataSummaryProps = {
+    name: "",
+    id: 0,
+    image: "",
+    hp: 0,
+    height: 0,
+    weight: 0,
+    type: [],
+  }
+
+  const [chosenPokemon, setChosenPokemon] =
+    useState<ChosenPokemonDataSummaryProps>(chosenPokemonDataSummary)
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
+
+  const listTypes = (types: pokenmonTypes[]): string[] => {
+    const typesArray: string[] = []
+    types.map((type) => {
+      typesArray.push(type.pokemon_v2_type.name)
+    })
+    return typesArray
+  }
 
   return (
     <>
@@ -23,7 +51,21 @@ export const ChoosePokemon = ({ pokemons_data }: ChoosePokemonProps) => {
               <button
                 key={item.id}
                 className="transition duration-100 bg-slate-300 hover:bg-amber-200 focus:bg-amber-300 flex flex-col justify-center items-center relative p-2 pb-6"
-                onClick={() => setChosenPokemon(item.name)}
+                onClick={() =>
+                  setChosenPokemon({
+                    ...chosenPokemon,
+                    name: item.name,
+                    id: item.id,
+                    image:
+                      item.pokemon_v2_pokemonsprites[0].sprites.other[
+                        `official-artwork`
+                      ].front_default,
+                    hp: item.pokemon_v2_pokemonstats[0].base_stat,
+                    height: item.height,
+                    weight: item.weight,
+                    type: listTypes(item.pokemon_v2_pokemontypes),
+                  })
+                }
               >
                 <div>
                   <Image
@@ -51,7 +93,7 @@ export const ChoosePokemon = ({ pokemons_data }: ChoosePokemonProps) => {
       )}
       {gameIsReady && (
         <div>
-          <span className="w-full">Chosen pokemon: {chosenPokemon}</span>
+          <span className="w-full">Chosen pokemon: {chosenPokemon.name}</span>
         </div>
       )}
     </>
