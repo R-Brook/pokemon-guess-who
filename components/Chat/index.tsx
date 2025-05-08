@@ -66,7 +66,8 @@ const ChatPage = () => {
     <section className=" w-full h-auto flex justify-center align-middle flex-col">
       {/* Log in section */}
       {!showChat && (
-        <section className="border-2 border-blue-400 flex justify-center align-middle flex-col gap-4">
+        <section className="flex justify-center align-middle flex-col gap-4">
+          <h2 className="text-2xl">Log in</h2>
           <input
             className="h-8 w-60 p-2"
             type="text"
