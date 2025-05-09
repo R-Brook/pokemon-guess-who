@@ -1,10 +1,10 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Button } from "../Button"
-import { pokemonsData, pokenmonTypes } from "@/types/pokemons"
+import { IPokemonsData, IPokemonTypes } from "@/types/pokemons"
 
 export interface IChoosePokemon {
-  pokemons_data: pokemonsData[]
+  pokemons_data: IPokemonsData[]
 }
 
 export interface IChosenPokemonDataSummary {
@@ -33,7 +33,7 @@ export const ChoosePokemon = ({ pokemons_data }: IChoosePokemon) => {
   )
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
 
-  const listTypes = (types: pokenmonTypes[]): string[] => {
+  const listTypes = (types: IPokemonTypes[]): string[] => {
     const typesArray: string[] = []
     types.map((type) => {
       typesArray.push(type.pokemon_v2_type.name)
@@ -48,7 +48,7 @@ export const ChoosePokemon = ({ pokemons_data }: IChoosePokemon) => {
           <h2 className="text-2xl">Choose your Pokemon:</h2>
 
           <div className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 lg:grid-cols-8 gap-1">
-            {pokemons_data.map((item: pokemonsData) => (
+            {pokemons_data.map((item: IPokemonsData) => (
               <button
                 key={item.id}
                 className="transition duration-100 bg-slate-300 hover:bg-amber-200 focus:bg-amber-300 flex flex-col justify-center items-center relative p-2 pb-6"
