@@ -6,8 +6,15 @@ import ChatPage from "@/components/Chat"
 import { ChoosePokemon } from "@/components/Choose-Pokemon"
 import { pokemonsData, PokemonsProps } from "@/types/pokemons"
 import { shuffleArray } from "@/utilities/shuffle"
+import { iGameStatus } from "@/types/game"
 
 export default function Home({ pokemonsData }: PokemonsProps) {
+  const initialGameStatus: iGameStatus = {
+    loggedIn: false,
+    pokemonChosen: false,
+  }
+
+  const [gameStatus, setGameStatus] = useState<iGameStatus>(initialGameStatus)
   const [pokemonCards, setPokemonCards] = useState<pokemonsData[]>(pokemonsData)
   const [pokemonCardsReady, setPokemonCardsReady] = useState<boolean>(false)
 
