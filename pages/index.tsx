@@ -4,18 +4,19 @@ import client from "@/apollo-graphql/apollo-client"
 import { Card } from "@/components/Card/index"
 import ChatPage from "@/components/Chat"
 import { ChoosePokemon } from "@/components/Choose-Pokemon"
-import { pokemonsData, PokemonsProps } from "@/types/pokemons"
+import { IPokemonsData, IPokemons } from "@/types/pokemons"
 import { shuffleArray } from "@/utilities/shuffle"
 import { iGameStatus } from "@/types/game"
 
-export default function Home({ pokemonsData }: PokemonsProps) {
+export default function Home({ pokemonsData }: IPokemons) {
   const initialGameStatus: iGameStatus = {
     loggedIn: false,
     pokemonChosen: false,
   }
 
   const [gameStatus, setGameStatus] = useState<iGameStatus>(initialGameStatus)
-  const [pokemonCards, setPokemonCards] = useState<pokemonsData[]>(pokemonsData)
+  const [pokemonCards, setPokemonCards] =
+    useState<IPokemonsData[]>(pokemonsData)
   const [pokemonCardsReady, setPokemonCardsReady] = useState<boolean>(false)
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function Home({ pokemonsData }: PokemonsProps) {
 
         {pokemonCardsReady && (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 pb-16">
-            {pokemonCards.map((item: pokemonsData) => (
+            {pokemonCards.map((item: IPokemonsData) => (
               <Card
                 key={item.name}
                 name={item.name}

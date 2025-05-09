@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC } from "react"
 
-export interface SelectProps {
+export interface ISelect {
   required: boolean
   label: string
   name: string
@@ -11,7 +11,7 @@ export interface SelectProps {
   value: string | number
 }
 
-export const Select: FC<SelectProps> = ({
+export const Select: FC<ISelect> = ({
   required,
   label,
   id,

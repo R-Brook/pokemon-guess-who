@@ -1,20 +1,20 @@
 import React, { FC, useState } from "react"
 import Image from "next/image"
-import { pokenmonTypes } from "@/types/pokemons"
+import { IPokemonTypes } from "@/types/pokemons"
 import { typeColours } from "@/data/type-colours"
 import { hectogramsToPounds } from "@/utilities/data-conversion"
 
-export interface CardProps {
+export interface ICard {
   name: string
   id: number
   image: string
   hp: number
   height: number
   weight: number
-  type: pokenmonTypes[]
+  type: IPokemonTypes[]
 }
 
-export const Card: FC<CardProps> = ({
+export const Card: FC<ICard> = ({
   name,
   id,
   image,

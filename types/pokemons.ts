@@ -1,8 +1,8 @@
-export interface PokemonsProps {
-  pokemonsData: pokemonsData[]
+export interface IPokemons {
+  pokemonsData: IPokemonsData[]
 }
 
-export interface pokemonsDataSummary {
+export interface IPokemonsDataSummary {
   height: number
   base_experience: number
   name: string
@@ -10,29 +10,29 @@ export interface pokemonsDataSummary {
   weight: number
 }
 
-export interface pokemonsData extends pokemonsDataSummary {
-  pokemon_v2_pokemonstats: pokemonStats[]
-  pokemon_v2_pokemontypes: pokenmonTypes[]
-  pokemon_v2_pokemonsprites: pokemonSprites[]
+export interface IPokemonsData extends IPokemonsDataSummary {
+  pokemon_v2_pokemonstats: IPokemonStats[]
+  pokemon_v2_pokemontypes: IPokemonTypes[]
+  pokemon_v2_pokemonsprites: IPokemonSprites[]
 }
 
-export interface pokemonStats {
+export interface IPokemonStats {
   base_stat: number
-  pokemon_v2_stat: pokemonStat[]
+  pokemon_v2_stat: IPokemonStat[]
 }
 
-export interface pokemonStat {
+export interface IPokemonStat {
   name: string
 }
 
-export interface pokenmonTypes {
+export interface IPokemonTypes {
   pokemon_v2_type: {
     name: string
     id: number
   }
 }
 
-export interface pokemonSprites {
+export interface IPokemonSprites {
   sprites: {
     other: {
       "official-artwork": {
