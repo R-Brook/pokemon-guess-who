@@ -1,10 +1,10 @@
 import { FC } from "react"
 
-export interface ButtonProps extends React.HTMLProps<HTMLButtonElement> {
+export interface IButton extends React.HTMLProps<HTMLButtonElement> {
   full_width?: boolean
 }
 
-export const Button: FC<ButtonProps> = ({ onClick, full_width, children }) => {
+export const Button: FC<IButton> = ({ onClick, full_width, children }) => {
   return (
     <button
       onClick={onClick}
