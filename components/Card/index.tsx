@@ -4,7 +4,7 @@ import { pokenmonTypes } from "@/types/pokemons"
 import { typeColours } from "@/data/type-colours"
 import { hectogramsToPounds } from "@/utilities/data-conversion"
 
-export interface CardProps {
+export interface ICard {
   name: string
   id: number
   image: string
@@ -14,7 +14,7 @@ export interface CardProps {
   type: pokenmonTypes[]
 }
 
-export const Card: FC<CardProps> = ({
+export const Card: FC<ICard> = ({
   name,
   id,
   image,

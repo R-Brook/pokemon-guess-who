@@ -3,11 +3,11 @@ import Image from "next/image"
 import { Button } from "../Button"
 import { pokemonsData, pokenmonTypes } from "@/types/pokemons"
 
-export interface ChoosePokemonProps {
+export interface IChoosePokemon {
   pokemons_data: pokemonsData[]
 }
 
-export interface ChosenPokemonDataSummaryProps {
+export interface IChosenPokemonDataSummary {
   name: string
   id: number
   image: string
@@ -17,8 +17,8 @@ export interface ChosenPokemonDataSummaryProps {
   type: string[]
 }
 
-export const ChoosePokemon = ({ pokemons_data }: ChoosePokemonProps) => {
-  const chosenPokemonDataSummary: ChosenPokemonDataSummaryProps = {
+export const ChoosePokemon = ({ pokemons_data }: IChoosePokemon) => {
+  const chosenPokemonDataSummary: IChosenPokemonDataSummary = {
     name: "",
     id: 0,
     image: "",
@@ -28,8 +28,9 @@ export const ChoosePokemon = ({ pokemons_data }: ChoosePokemonProps) => {
     type: [],
   }
 
-  const [chosenPokemon, setChosenPokemon] =
-    useState<ChosenPokemonDataSummaryProps>(chosenPokemonDataSummary)
+  const [chosenPokemon, setChosenPokemon] = useState<IChosenPokemonDataSummary>(
+    chosenPokemonDataSummary
+  )
   const [gameIsReady, setGameIsReady] = useState<boolean>(false)
 
   const listTypes = (types: pokenmonTypes[]): string[] => {
