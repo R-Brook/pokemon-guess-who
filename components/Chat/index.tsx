@@ -72,7 +72,7 @@ export const ChatPage: FC = () => {
             className="h-8 w-60 p-2"
             type="text"
             placeholder="Username"
-            onChange={(e /*setUserName(e.target.value)*/) =>
+            onChange={(e) =>
               dispatch({
                 type: "setPlayerName",
                 payload: e.target.value,
