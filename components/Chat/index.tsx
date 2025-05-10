@@ -4,7 +4,7 @@ import { Button } from "@/components/Button"
 import { io, Socket } from "socket.io-client"
 import { DefaultEventsMap } from "socket.io"
 import { IMsgDataTypes } from "@/types/game"
-import { useGameStatusDispatch } from "@/contexts/game-status"
+import { usePlayerDispatch } from "@/contexts/player"
 
 export const ChatPage: FC = () => {
   const [showChat, setShowChat] = useState<boolean>(false)
@@ -19,11 +19,10 @@ export const ChatPage: FC = () => {
     "http://localhost:3001"
   )
 
-  const dispatch = useGameStatusDispatch()
+  const dispatch = usePlayerDispatch()
 
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {
-      console.log(userName, "userName", roomId, "roomId")
       socket.emit("join_room", roomId)
       setShowSpinner(true)
       // You can remove this setTimeout and add your own logic
@@ -35,7 +34,7 @@ export const ChatPage: FC = () => {
           payload: {
             logged_in: true,
             room_id: roomId,
-            name: userName,
+            player_name: userName,
           },
         })
       }, 4000)

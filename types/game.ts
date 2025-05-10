@@ -1,12 +1,5 @@
 export interface IGameStatus {
-  player: IPlayer
   chosenPokemon: IChosenPokemon
-}
-
-export interface IPlayer {
-  logged_in: boolean
-  room_id: string
-  name: string
 }
 
 export interface IChosenPokemon {

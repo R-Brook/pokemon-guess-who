@@ -6,10 +6,12 @@ import { ChatPage } from "@/components/Chat"
 import { ChoosePokemon } from "@/components/Choose-Pokemon"
 import { IPokemonsData, IPokemons } from "@/types/pokemons"
 import { shuffleArray } from "@/utilities/shuffle"
-import { useGameStatus } from "@/contexts/game-status"
+import { useGameStatus } from "@/contexts/game"
+import { usePlayer } from "@/contexts/player"
 
 export default function Home({ pokemonsData }: IPokemons) {
-  const { player, chosenPokemon } = useGameStatus()
+  const { chosenPokemon } = useGameStatus()
+  const { logged_in, room_id, player_name } = usePlayer()
 
   const [pokemonCards, setPokemonCards] =
     useState<IPokemonsData[]>(pokemonsData)

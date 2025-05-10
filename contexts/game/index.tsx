@@ -3,11 +3,6 @@ import { IGameStatus } from "@/types/game"
 import { Action, IGameDispatch } from "./types"
 
 const initialGameStatus: IGameStatus = {
-  player: {
-    logged_in: false,
-    room_id: "",
-    name: "",
-  },
   chosenPokemon: {
     pokemon_chosen: false,
     pokemon_name: "",
@@ -16,11 +11,6 @@ const initialGameStatus: IGameStatus = {
 
 const reducer = (state: IGameStatus, action: Action) => {
   switch (action.type) {
-    case "loggedIn":
-      return {
-        ...state,
-        player: action.payload,
-      }
     case "setChoosePokemon":
       return {
         ...state,
