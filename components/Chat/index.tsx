@@ -4,10 +4,11 @@ import { Button } from "@/components/Button"
 import { io, Socket } from "socket.io-client"
 import { DefaultEventsMap } from "socket.io"
 import { IMsgDataTypes } from "@/types/game"
-import { usePlayerDispatch } from "@/contexts/player"
+import { usePlayer, usePlayerDispatch } from "@/contexts/player"
 
 export const ChatPage: FC = () => {
-  const [showChat, setShowChat] = useState<boolean>(false)
+  const { logged_in } = usePlayer()
+
   const [currentMsg, setCurrentMsg] = useState("")
   const [chat, setChat] = useState<IMsgDataTypes[]>([])
 
@@ -27,7 +28,7 @@ export const ChatPage: FC = () => {
       setShowSpinner(true)
       // You can remove this setTimeout and add your own logic
       setTimeout(() => {
-        setShowChat(true)
+        // setShowChat(true)
         setShowSpinner(false)
         dispatch({
           type: "loggedIn",
@@ -69,7 +70,7 @@ export const ChatPage: FC = () => {
   return (
     <section className=" w-full h-auto flex justify-center align-middle flex-col">
       {/* Log in section */}
-      {!showChat && (
+      {!logged_in && (
         <section className="flex justify-center align-middle flex-col gap-4">
           <h2 className="text-2xl">Log in</h2>
           <input
@@ -96,7 +97,7 @@ export const ChatPage: FC = () => {
         </section>
       )}
       {/* Chat section */}
-      {showChat && (
+      {logged_in && (
         <div className="border-2 border-red-500 p-2">
           <div style={{ marginBottom: "1rem" }}>
             <p>
