@@ -1,4 +1,4 @@
 export interface iGameStatus {
-  loggedIn: boolean
-  pokemonChosen: boolean
+  logged_in: boolean
+  pokemon_chosen: boolean
 }

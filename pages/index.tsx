@@ -10,8 +10,8 @@ import { iGameStatus } from "@/types/game"
 
 export default function Home({ pokemonsData }: IPokemons) {
   const initialGameStatus: iGameStatus = {
-    loggedIn: false,
-    pokemonChosen: false,
+    logged_in: false,
+    pokemon_chosen: false,
   }
 
   const [gameStatus, setGameStatus] = useState<iGameStatus>(initialGameStatus)
