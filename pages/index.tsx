@@ -2,19 +2,15 @@ import { useEffect, useState } from "react"
 import { POKEMONS_QUERY } from "@/apollo-graphql/queries/pokemons"
 import client from "@/apollo-graphql/apollo-client"
 import { Card } from "@/components/Card/index"
-import ChatPage from "@/components/Chat"
+import { ChatPage } from "@/components/Chat"
 import { ChoosePokemon } from "@/components/Choose-Pokemon"
 import { IPokemonsData, IPokemons } from "@/types/pokemons"
 import { shuffleArray } from "@/utilities/shuffle"
-import { iGameStatus } from "@/types/game"
+import { useGameStatus } from "@/contexts/game-status"
 
 export default function Home({ pokemonsData }: IPokemons) {
-  const initialGameStatus: iGameStatus = {
-    logged_in: false,
-    pokemon_chosen: false,
-  }
+  const { player, chosenPokemon } = useGameStatus()
 
-  const [gameStatus, setGameStatus] = useState<iGameStatus>(initialGameStatus)
   const [pokemonCards, setPokemonCards] =
     useState<IPokemonsData[]>(pokemonsData)
   const [pokemonCardsReady, setPokemonCardsReady] = useState<boolean>(false)

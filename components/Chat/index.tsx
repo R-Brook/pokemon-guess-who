@@ -1,17 +1,12 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Button } from "@/components/Button"
 import { io, Socket } from "socket.io-client"
 import { DefaultEventsMap } from "socket.io"
+import { IMsgDataTypes } from "@/types/game"
+import { useGameStatusDispatch } from "@/contexts/game-status"
 
-export interface IMsgDataTypes {
-  roomId: string | number
-  user: string
-  msg: string
-  time: string
-}
-
-const ChatPage = () => {
+export const ChatPage: FC = () => {
   const [showChat, setShowChat] = useState<boolean>(false)
   const [currentMsg, setCurrentMsg] = useState("")
   const [chat, setChat] = useState<IMsgDataTypes[]>([])
@@ -24,6 +19,8 @@ const ChatPage = () => {
     "http://localhost:3001"
   )
 
+  const dispatch = useGameStatusDispatch()
+
   const handleJoin = () => {
     if (userName !== "" && roomId !== "") {
       console.log(userName, "userName", roomId, "roomId")
@@ -33,6 +30,14 @@ const ChatPage = () => {
       setTimeout(() => {
         setShowChat(true)
         setShowSpinner(false)
+        dispatch({
+          type: "loggedIn",
+          payload: {
+            logged_in: true,
+            room_id: roomId,
+            name: userName,
+          },
+        })
       }, 4000)
     } else {
       alert("Please fill in Username and Room Id")
@@ -138,5 +143,3 @@ const ChatPage = () => {
     </section>
   )
 }
-
-export default ChatPage
