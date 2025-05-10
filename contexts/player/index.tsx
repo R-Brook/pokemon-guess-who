@@ -13,9 +13,12 @@ const reducer = (state: IPlayer, action: Action) => {
     case "loggedIn":
       return {
         ...state,
-        logged_in: action.payload.logged_in,
-        room_id: action.payload.room_id,
-        player_name: action.payload.player_name,
+        logged_in: action.payload,
+      }
+    case "setPlayerName":
+      return {
+        ...state,
+        player_name: action.payload,
       }
     default:
       throw new Error("Player status error, not a valid action")

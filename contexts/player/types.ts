@@ -4,9 +4,14 @@ export interface IPlayer {
   player_name: string
 }
 
-export type Action = {
-  type: "loggedIn"
-  payload: IPlayer
-}
+export type Action =
+  | {
+      type: "loggedIn"
+      payload: boolean
+    }
+  | {
+      type: "setPlayerName"
+      payload: string
+    }
 
 export type IPlayerDispatch = (action: Action) => void
