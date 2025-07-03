@@ -1,15 +1,22 @@
-import { createContext, useContext, useReducer } from "react"
-
+import { createContext, useContext, useEffect, useReducer } from "react"
+import localforage from "localforage"
 import { Action, IPlayer, IPlayerDispatch } from "./types"
 
 const initialPlayerStatus: IPlayer = {
   logged_in: false,
   room_id: "",
   player_name: "",
+  initialised: false,
 }
 
 const reducer = (state: IPlayer, action: Action) => {
   switch (action.type) {
+    case "initialised":
+      return {
+        ...state,
+        ...action.payload,
+        initialised: true,
+      }
     case "loggedIn":
       return {
         ...state,
@@ -35,8 +42,40 @@ const PlayerDispatchContext = createContext<IPlayerDispatch | undefined>(
   undefined
 )
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const PlayerProvider = ({ children }: any) => {
   const [state, dispatch] = useReducer(reducer, initialPlayerStatus)
+
+  useEffect(() => {
+    const getFromLocalStorage = async () => {
+      try {
+        const localStoragePlayerState: IPlayer =
+          (await localforage.getItem("pokemon-guess-who-player")) ||
+          initialPlayerStatus
+        dispatch({ type: "initialised", payload: localStoragePlayerState })
+      } catch (err) {
+        console.log(err)
+      }
+    }
+
+    getFromLocalStorage()
+  }, [])
+
+  useEffect(() => {
+    if (!state.initialised) {
+      return
+    }
+
+    const setToLocalStorage = async () => {
+      try {
+        await localforage.setItem("pokemon-guess-who-player", state)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    setToLocalStorage()
+  }, [state])
 
   return (
     <PlayerContext.Provider value={state}>
