@@ -15,12 +15,8 @@ export type Action =
       payload: boolean
     }
   | {
-      type: "setPlayerName"
-      payload: string
-    }
-  | {
-      type: "setRoomId"
-      payload: string
+      type: "setPlayerNameandRoomId"
+      payload: { player_name: string; room_id: string }
     }
 
 export type IPlayerDispatch = (action: Action) => void

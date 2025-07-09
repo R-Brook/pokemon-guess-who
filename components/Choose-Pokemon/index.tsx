@@ -79,6 +79,7 @@ export const ChoosePokemon = ({ pokemons_data }: IChoosePokemon) => {
                     alt={"type icon"}
                     width={0}
                     height={0}
+                    unoptimized
                     style={{ width: "auto", height: "auto" }}
                   />
                 </div>

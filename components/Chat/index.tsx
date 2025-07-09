@@ -6,32 +6,49 @@ import { DefaultEventsMap } from "socket.io"
 import { IMsgDataTypes } from "@/types/game"
 import { usePlayer, usePlayerDispatch } from "@/contexts/player"
 
+/*
+Progress:
+- Need to make a state for storing player name as it's being typed, which then upon joining gets sent to the context and local forage.
+- Same for the room ID.
+
+*/
+
 export const ChatPage: FC = () => {
   const { logged_in, player_name } = usePlayer()
+
+  const dispatchPlayer = usePlayerDispatch()
 
   const [currentMsg, setCurrentMsg] = useState("")
   const [chat, setChat] = useState<IMsgDataTypes[]>([])
 
   const [showSpinner, setShowSpinner] = useState<boolean>(false)
+
   const [roomId, setroomId] = useState<string>("")
+  const [playerName, setPlayerName] = useState<string>("")
 
   const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io(
     "http://localhost:3001"
   )
 
-  const dispatch = usePlayerDispatch()
-
   const handleJoin = () => {
-    if (player_name !== "" && roomId !== "") {
+    if (playerName !== "" && roomId !== "") {
       socket.emit("join_room", roomId)
       setShowSpinner(true)
       // You can remove this setTimeout and add your own logic
       setTimeout(() => {
         // setShowChat(true)
         setShowSpinner(false)
-        dispatch({
+
+        dispatchPlayer({
           type: "loggedIn",
           payload: true,
+        })
+        dispatchPlayer({
+          type: "setPlayerNameandRoomId",
+          payload: {
+            player_name: playerName,
+            room_id: roomId,
+          },
         })
       }, 4000)
     } else {
@@ -73,10 +90,13 @@ export const ChatPage: FC = () => {
             type="text"
             placeholder="Username"
             onChange={(e) =>
-              dispatch({
-                type: "setPlayerName",
-                payload: e.target.value,
-              })
+              // dispatch({
+              //   type: "setPlayerName",
+              //   payload: e.target.value,
+              // })
+              // Set state here
+              // console.log(e.target.value)
+              setPlayerName(e.target.value)
             }
             disabled={showSpinner}
           />
