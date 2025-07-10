@@ -1,38 +1,55 @@
 "use client"
-import React, { useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { Button } from "@/components/Button"
 import { io, Socket } from "socket.io-client"
 import { DefaultEventsMap } from "socket.io"
+import { IMsgDataTypes } from "@/types/game"
+import { usePlayer, usePlayerDispatch } from "@/contexts/player"
 
-export interface IMsgDataTypes {
-  roomId: string | number
-  user: string
-  msg: string
-  time: string
-}
+/*
+Progress:
+- Need to make a state for storing player name as it's being typed, which then upon joining gets sent to the context and local forage.
+- Same for the room ID.
 
-const ChatPage = () => {
-  const [showChat, setShowChat] = useState<boolean>(false)
+*/
+
+export const ChatPage: FC = () => {
+  const { logged_in, player_name } = usePlayer()
+
+  const dispatchPlayer = usePlayerDispatch()
+
   const [currentMsg, setCurrentMsg] = useState("")
   const [chat, setChat] = useState<IMsgDataTypes[]>([])
 
-  const [userName, setUserName] = useState<string>("")
   const [showSpinner, setShowSpinner] = useState<boolean>(false)
+
   const [roomId, setroomId] = useState<string>("")
+  const [playerName, setPlayerName] = useState<string>("")
 
   const socket: Socket<DefaultEventsMap, DefaultEventsMap> = io(
     "http://localhost:3001"
   )
 
   const handleJoin = () => {
-    if (userName !== "" && roomId !== "") {
-      console.log(userName, "userName", roomId, "roomId")
+    if (playerName !== "" && roomId !== "") {
       socket.emit("join_room", roomId)
       setShowSpinner(true)
       // You can remove this setTimeout and add your own logic
       setTimeout(() => {
-        setShowChat(true)
+        // setShowChat(true)
         setShowSpinner(false)
+
+        dispatchPlayer({
+          type: "loggedIn",
+          payload: true,
+        })
+        dispatchPlayer({
+          type: "setPlayerNameandRoomId",
+          payload: {
+            player_name: playerName,
+            room_id: roomId,
+          },
+        })
       }, 4000)
     } else {
       alert("Please fill in Username and Room Id")
@@ -44,7 +61,7 @@ const ChatPage = () => {
     if (currentMsg !== "") {
       const msgData: IMsgDataTypes = {
         roomId,
-        user: userName,
+        user: player_name,
         msg: currentMsg,
         time:
           new Date(Date.now()).getHours() +
@@ -65,14 +82,22 @@ const ChatPage = () => {
   return (
     <section className=" w-full h-auto flex justify-center align-middle flex-col">
       {/* Log in section */}
-      {!showChat && (
+      {!logged_in && (
         <section className="flex justify-center align-middle flex-col gap-4">
           <h2 className="text-2xl">Log in</h2>
           <input
             className="h-8 w-60 p-2"
             type="text"
             placeholder="Username"
-            onChange={(e) => setUserName(e.target.value)}
+            onChange={(e) =>
+              // dispatch({
+              //   type: "setPlayerName",
+              //   payload: e.target.value,
+              // })
+              // Set state here
+              // console.log(e.target.value)
+              setPlayerName(e.target.value)
+            }
             disabled={showSpinner}
           />
           <input
@@ -92,11 +117,11 @@ const ChatPage = () => {
         </section>
       )}
       {/* Chat section */}
-      {showChat && (
+      {logged_in && (
         <div className="border-2 border-red-500 p-2">
           <div style={{ marginBottom: "1rem" }}>
             <p>
-              Name: <b>{userName}</b> and Room Id: <b>{roomId}</b>
+              Name: <b>{player_name}</b> and Room Id: <b>{roomId}</b>
             </p>
           </div>
           <div>
@@ -104,18 +129,20 @@ const ChatPage = () => {
               <div
                 key={key}
                 className={
-                  user == userName
+                  user == player_name
                     ? "flex align-middle gap-1 flex-row-reverse mb-1"
                     : "flex align-middle gap-1 mb-1"
                 }
               >
                 <span
                   className=" bg-slate-300 h-8 w-8 border-2 border-white flex  justify-center align-middle text-black"
-                  style={{ textAlign: user == userName ? "right" : "left" }}
+                  style={{ textAlign: user == player_name ? "right" : "left" }}
                 >
                   {user.charAt(0)}
                 </span>
-                <h3 style={{ textAlign: user == userName ? "right" : "left" }}>
+                <h3
+                  style={{ textAlign: user == player_name ? "right" : "left" }}
+                >
                   {msg}
                 </h3>
               </div>
@@ -138,5 +165,3 @@ const ChatPage = () => {
     </section>
   )
 }
-
-export default ChatPage
